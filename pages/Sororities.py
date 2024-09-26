@@ -9,12 +9,23 @@ if 'correct2' not in st.session_state:
     st.session_state.correct2 = ""
 if 'sororities' not in st.session_state:
     st.session_state.sororities = {
-        1: 'Alpha Chi Omega', 2: 'Alpha Omicron Pi', 3: 'Alpha Phi', 
-        4: 'Alpha Xi Delta', 5: 'Chi Omega', 6: 'Delta Delta Delta', 
-        7: 'Delta Gamma', 8: 'Gamma Phi Beta', 9: 'Kappa Alpha Theta', 
-        10: 'Kappa Delta', 11: 'Kappa Kappa Gamma', 12: 'Phi Mu', 
-        13: 'Pi Beta Phi',
+        1: ['Alpha Chi Omega', 'AXO', 'A Chi O'], 
+        2: ['Alpha Omicron Pi', 'AOPi', 'AO Pi'], 
+        3: ['Alpha Phi', 'APhi', 'A Phi'], 
+        4: ['Alpha Xi Delta', 'AXiD', 'AZD'], 
+        5: ['Chi Omega', 'Chi O'], 
+        6: ['Delta Delta Delta', 'Tri Delta'], 
+        7: ['Delta Gamma', 'DG'], 
+        8: ['Gamma Phi Beta', 'GPhi', 'G Phi'], 
+        9: ['Kappa Alpha Theta', 'Theta'], 
+        10: ['Kappa Delta', 'KD'], 
+        11: ['Kappa Kappa Gamma', 'KKG'], 
+        12: ['Phi Mu'], 
+        13: ['Pi Beta Phi', 'Pi Phi']
     }
+if 'question_pool2' not in st.session_state:
+    st.session_state.question_pool2 = list(st.session_state.sororities.keys())
+    random.shuffle(st.session_state.question_pool2)
 if 'number2' not in st.session_state:
     st.session_state.number2 = random.choice(list(st.session_state.sororities.keys()))
 if 'input2' not in st.session_state:
@@ -46,7 +57,11 @@ with columns[1]:
             st.session_state.correct2 = "🎉 Correct!"
         else:
             st.session_state.correct2 = f"❌ Incorrect. The correct answer was {st.session_state.sororities[st.session_state.number2]}."
-        st.session_state.number2 = random.choice(list(st.session_state.sororities.keys()))
+        if not st.session_state.question_pool2:
+            st.session_state.number2 = list(st.session_state.sororities.keys())
+            random.shuffle(st.session_state.question_pool2)
+
+        st.session_state.number2 = st.session_state.question_pool2.pop()    
         st.session_state.current_question2 += 1
         st.rerun()
 

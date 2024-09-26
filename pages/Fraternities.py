@@ -9,13 +9,25 @@ if 'correct' not in st.session_state:
     st.session_state.correct = ""
 if 'fraternities' not in st.session_state:
     st.session_state.fraternities = {
-        4: 'Alpha Tau Omega', 5: 'Beta Theta Pi', 6: 'Delta Tau Delta', 
-        7: 'Delta Upsilon', 9: 'Phi Kappa Psi', 10: 'Phi Delta Theta', 
-        11: 'Phi Kappa Theta', 12: 'Pi Kappa Phi', 13: 'Sigma Alpha Epsilon', 
-        14: 'Sigma Chi', 15: 'Sigma Phi Epsilon', 16: 'Theta Xi', 17: 'Triangle',
+        4: ['Alpha Tau Omega', 'ATO'], 
+        5: ['Beta Theta Pi', 'Beta'], 
+        6: ['Delta Tau Delta', 'Delts'], 
+        7: ['Delta Upsilon', 'DU'], 
+        9: ['Phi Kappa Psi', 'Phi Psi'], 
+        10: ['Phi Delta Theta', 'Phi Delt'], 
+        11: ['Phi Kappa Theta', 'Phi Kap'], 
+        12: ['Pi Kappa Phi', 'Pi Kap'], 
+        13: ['Sigma Alpha Epsilon', 'SAE'], 
+        14: ['Sigma Chi', 'Sig Chi'], 
+        15: ['Sigma Phi Epsilon', 'Sig Ep'], 
+        16: ['Theta Xi', 'Theta X'], 
+        17: ['Triangle']
     }
+if 'question_pool' not in st.session_state:
+    st.session_state.question_pool = list(st.session_state.fraternities.keys())
+    random.shuffle(st.session_state.question_pool)
 if 'number' not in st.session_state:
-    st.session_state.number = random.choice(list(st.session_state.fraternities.keys()))
+    st.session_state.number = st.session_state.question_pool.pop()
 if 'input' not in st.session_state:
     st.session_state.input = ""
 
@@ -45,7 +57,13 @@ with columns[1]:
             st.session_state.correct = "🎉 Correct!"
         else:
             st.session_state.correct = f"❌ Incorrect. The correct answer was {st.session_state.fraternities[st.session_state.number]}."
-        st.session_state.number = random.choice(list(st.session_state.fraternities.keys()))
+        
+        # Get next question
+        if not st.session_state.question_pool:
+            st.session_state.question_pool = list(st.session_state.fraternities.keys())
+            random.shuffle(st.session_state.question_pool)
+        
+        st.session_state.number = st.session_state.question_pool.pop()
         st.session_state.current_question += 1
         st.rerun()
 
